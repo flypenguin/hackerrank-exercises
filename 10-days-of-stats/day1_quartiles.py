@@ -11,7 +11,7 @@ def median(l):
     if llen % 2 == 1:
         return l[llen//2]
     else:
-        return (l[(llen//2)-1]+l[llen//2]) / 2
+        return (l[(llen//2)-1]+l[llen//2]) // 2
 
 left, right = leftright(arr)
 print(median(left))

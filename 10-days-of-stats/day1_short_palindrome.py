@@ -1,32 +1,56 @@
-from collections import defaultdict
+import time
 
-# testset: s='kkkkkkz', result=15, with this we get 14.
+# still no good.
 
-#s = list(map(ord, list(input())))
-#s = "apopohauugha"
-s = 'kkkkkkz'
-slen = len(s)
+
+#r = 'kkkkkkz' # should be 15
+#works
+
+#r = 'abbaab'  # should be 4
+# works
+
+r = 10000 * 'z' + 'aabbbbbbaa'
+# should be 709582664
+# no good. and waay to slow.
+
+
+# start
+
+ord_z = ord('z')
+ord_a = ord('a')
+alpha_len = ord_z - ord_a + 1
+
+#r = input()
+s = map(lambda x: ord(x) - ord_a, list(r))
+t = bytearray(s)
+slen = len(t)
 
 found = 0
 
-# there must be cause this timeouts.
-countdict = defaultdict(int)
-cd_start = 1
-a = 0
-for d in range(a + 3, slen):
-    if not s[d] == s[a]:
-        continue
-    else:
-        for idx in range(cd_start, d):
-            countdict[s[idx]] += 1
-        cd_start = d
-        for val in countdict.values():
-            val_tmp = val - 1
-            found += int((val_tmp / 2) * (val_tmp + 1))
 for a in range(0, slen - 3):
-    countdict[s[a]] -= 1
-    assert countdict[s[a]] >= 0
-    for val in countdict.values():
-        found += int((val / 2) * (val + 1))
+    print("a=%s (time: %s)"%(a, time.time()))
+    if a == 2: break
+    for d in range(a + 3, slen):
+        if not t[d] == t[a]:
+            continue
 
-print(found % (10 ** 9 + 7))
+        # now. create an array / dict with the information "letter" -> <count>
+        # then we have for each letter with M' > 0 occurrences (M'*(M'-1)/2)
+        # possibilities for the inner matches. add them up and we have all
+        # palindrome-counts for a' and d'.
+
+        counts = [0] * alpha_len
+        for letter_num in t[a+1:d]:
+            counts[letter_num] += 1
+
+        # now we have the array which holds the information of all our letter
+        # occurrences (just how many of letter 'a', 'b', ... 'z' are in that
+        # part of the string)
+
+        for letter_count in counts:
+            found += int(letter_count * (letter_count - 1) / 2)
+
+    found = found % (10**9 + 7)
+
+
+print(found)

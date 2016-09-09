@@ -1,4 +1,5 @@
 import time
+import itertools
 
 # still no good.
 
@@ -21,14 +22,15 @@ ord_a = ord('a')
 alpha_len = ord_z - ord_a + 1
 
 #r = input()
-s = map(lambda x: ord(x) - ord_a, list(r))
-t = bytearray(s)
+#s = map(lambda x: ord(x) - ord_a, list(r))
+#t = bytearray(s)
+t = r
 slen = len(t)
 
 found = 0
 
 for a in range(0, slen - 3):
-    print("a=%s (time: %s)"%(a, time.time()))
+    #print("a=%s (time: %s)"%(a, time.time()))
     if a == 2: break
     for d in range(a + 3, slen):
         if not t[d] == t[a]:
@@ -40,7 +42,7 @@ for a in range(0, slen - 3):
         # palindrome-counts for a' and d'.
 
         counts = [0] * alpha_len
-        for letter_num in t[a+1:d]:
+        for letter_num in itertools.islice(t, a+1, d):
             counts[letter_num] += 1
 
         # now we have the array which holds the information of all our letter
